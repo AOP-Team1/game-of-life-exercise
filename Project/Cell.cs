@@ -5,7 +5,7 @@ namespace Sebi
         public bool State {get; set; }
         public int Neighbours {get; set; }
 
-        public bool NextState()
+        public bool NextState(int Neighbours)
         {
             if(this.Neighbours == 3)
                 return true;
