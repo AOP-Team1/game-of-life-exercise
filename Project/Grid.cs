@@ -1,23 +1,24 @@
+using System;
+using System.Collections.Generic;
 using Sebi;
 using Ignat;
 
-
 public class Grid : IGrid
 {
-    private readonly List<List<Cell>> cells;
+    private readonly List<List<ICell>> cells;
 
-    public int Rows { get; } //bajo 
-    public int Columns { get; } //jajo
+    public int Rows { get; }
+    public int Columns { get; }
 
     public Grid(int rows, int columns)
     {
         Rows = rows;
         Columns = columns;
 
-        cells = new List<List<Cell>>(Rows);
+        cells = new List<List<ICell>>(Rows);
         for (int i = 0; i < Rows; i++)
         {
-            List<Cell> row = new List<Cell>(Columns);
+            List<ICell> row = new List<ICell>(Columns);
             for (int j = 0; j < Columns; j++)
             {
                 row.Add(new Cell());
@@ -26,7 +27,7 @@ public class Grid : IGrid
         }
     }
 
-    public Cell GetCell(int row, int column)
+    public ICell GetCell(int row, int column)
     {
         if (row >= 0 && row < Rows && column >= 0 && column < Columns)
         {
@@ -37,25 +38,7 @@ public class Grid : IGrid
 
     }
 
-    public void UpdateCells()
-    {
-        for (int i = 0; i < Rows; i++)
-        {
-            for (int j = 0; j < Columns; j++)
-            {
-                UpdateCellState(i, j);
-            }
-        }
-
-        CalculateLiveNeighbors();
-    }
-
-    public void UpdateCellState(int row, int column)
-    {
-        int liveNeighbors = CountLiveNeighbors(row, column);
-        cells[row][column].State = cells[row][column].NextState(liveNeighbors);
-    }
-
+ 
     public int CountLiveNeighbors(int row, int column)
     {
         int liveNeighbors = 0;
@@ -109,9 +92,13 @@ public class Grid : IGrid
         throw new NotImplementedException();
     }
 
-    Cell IGrid.GetCell()
+    public Cell GetCell()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateCells()
     {
         throw new NotImplementedException();
     }
 }
-
