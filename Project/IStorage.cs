@@ -1,7 +1,8 @@
 namespace Kacper;
+using GameOfLife;
 
 public interface IStorage
 {
-    public void Load();
+    public Grid Load();
     public void Save();
 }
