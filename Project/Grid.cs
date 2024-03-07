@@ -1,7 +1,9 @@
+namespace GameOfLife;
 using System;
 using System.Collections.Generic;
 using Sebi;
 using Ignat;
+
 
 public class Grid : IGrid
 {
