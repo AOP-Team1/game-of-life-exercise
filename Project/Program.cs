@@ -46,6 +46,22 @@ public class Program
     //Validates user input to be an integer. Recieves as argument the lowerLimit and upperLimit (included)
     static int GetInputAndValidate(int lowerLimit, int upperLimit)
     {
-        return 1;
+        int userInput;
+        while(!Int32.TryParse(Console.ReadLine(), out userInput))
+        {
+            Console.WriteLine($"Given input was invalid, please give a whole number between {lowerLimit} and {upperLimit}");
+        }
+        if(userInput > upperLimit)
+        {
+            Console.WriteLine("Given input was too large, it has been rounded down to the upper limit");
+            userInput = upperLimit;
+        }
+        else if(userInput < lowerLimit)
+        {
+            Console.WriteLine("Given input was too small, it has been rounded down to the lower limit");
+            userInput = lowerLimit;
+        }
+
+        return userInput;
     }
 }
