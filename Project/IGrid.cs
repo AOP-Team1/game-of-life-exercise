@@ -6,7 +6,7 @@ public interface IGrid
 {
     int Rows { get; }
     int Columns { get; }
-    public Cell GetCell();
+    public ICell GetCell(int row, int column);
     public void UpdateCells();
     public int CountLiveNeighbors(int row, int column);
     public void CalculateLiveNeighbors();
