@@ -29,7 +29,7 @@ public class Grid : IGrid
         }
     }
 
-    public ICell GetCell(int row, int column)
+    public ICell? GetCell(int row, int column)
     {
         if (row >= 0 && row < Rows && column >= 0 && column < Columns)
         {

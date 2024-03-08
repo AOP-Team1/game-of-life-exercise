@@ -2,6 +2,7 @@
 using System;
 using static System.Console;
 using Francesco;
+using Kacper;
 
 
 public class Program
@@ -10,6 +11,8 @@ public class Program
     public static void Main()
     {
         JsonStorage jsonStorage = new JsonStorage();
+        Grid grid;
+        bool quit = false;
         Clear();
         WriteLine("Welcome to a simple implementation of Conway's game of Life");
 
@@ -17,30 +20,40 @@ public class Program
         WriteLine("2 - load grid from json");
         int c = GetInputAndValidate(1, 2);
 
-        if (c == 1)
-        {
-            NewRandomGrid();
-        }
         if (c == 2)
         {
-            LoadGridFromFile();
+            grid = jsonStorage.Load();      
         }
-
-        void LoadGridFromFile()
+        else
         {
-            Grid grid = jsonStorage.Load();
+            // set it to else instead of else if just so vs doesnt get mad
+            grid = NewRandomGrid();
         }
 
-        void NewRandomGrid()
+        AutomationSim sim = new AutomationSim(grid);
+        int counter = 0;
+
+        while(!quit)
         {
-            WriteLine("Enter number of rows for the grid (4 - 100)");
-            int x = GetInputAndValidate(4, 100);
+            Clear();
+            sim.DisplayGrid();
+            Console.WriteLine("Press Enter to move on to the next generation");
+            Console.ReadLine();
+            sim.UpdateGrid();
+            counter++;
+            if (counter == 100) break;
+        }   
+    }
 
-            WriteLine("Enter number of rows (4 - 100)");
-            int y = GetInputAndValidate(4, 100);
+    static Grid NewRandomGrid()
+    {
+        WriteLine("Enter number of rows for the grid (4 - 100)");
+        int x = GetInputAndValidate(4, 100);
 
-            Grid grid = new Grid(x, y);
-        }
+        WriteLine("Enter number of rows (4 - 100)");
+        int y = GetInputAndValidate(4, 100);
+
+        return new Grid(x, y);
     }
 
     //Validates user input to be an integer. Recieves as argument the lowerLimit and upperLimit (included)
