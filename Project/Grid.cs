@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using Sebi;
 using Ignat;
-
+using System.Text.Json.Serialization;
+using System.Data.Common;
+using System.Runtime.CompilerServices;
+using Kacper;
 
 public class Grid : IGrid
 {
@@ -11,11 +14,13 @@ public class Grid : IGrid
 
     public int Rows { get; }
     public int Columns { get; }
+    public bool[,] JsonCells { get; }
 
     public Grid(int rows, int columns)
     {
         Rows = rows;
         Columns = columns;
+        JsonCells = new bool[rows, columns];
 
         cells = new List<List<ICell>>(Rows);
         for (int i = 0; i < Rows; i++)
@@ -24,6 +29,27 @@ public class Grid : IGrid
             for (int j = 0; j < Columns; j++)
             {
                 row.Add(new Cell());
+                JsonCells[i, j] = false;
+            }
+            cells.Add(row);
+        }
+    }
+
+    public Grid(GridStorage gridStorage)
+    {
+        Rows = gridStorage.Rows;
+        Columns = gridStorage.Columns;
+        JsonCells = gridStorage.JsonCells;
+
+        cells = new List<List<ICell>>(Rows);
+        for (int i = 0; i < Rows; i++)
+        {
+            List<ICell> row = new List<ICell>(Columns);
+            for (int j = 0; j < Columns; j++)
+            {
+                ICell cell = new Cell();
+                cell.State = JsonCells[i,j];
+                row.Add(cell);
             }
             cells.Add(row);
         }
@@ -94,7 +120,7 @@ public class Grid : IGrid
         return false;
     }
 
-    public bool[,] GetCellStatus()
+    public bool[,] GetCellState()
     {
         bool[,] cellStatus = new bool[Rows, Columns];
         for (int i = 0; i < Rows; i++)
@@ -107,17 +133,22 @@ public class Grid : IGrid
         return cellStatus;
     }
 
+    public void UpdateCellState(int row, int column, bool newState)
+    {
+        if (row < 0 || row > Rows || column < 0 || column > Rows) throw new Exception("The given coordinates are outside of the grid");
+        else
+        {
+            cells[row][column].State = newState;
+            JsonCells[row, column] = newState;
+        }
+    }
+
     bool[] IGrid.GetCellStatus()
     {
         throw new NotImplementedException();
     }
 
     public Cell GetCell()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void UpdateCells()
     {
         throw new NotImplementedException();
     }

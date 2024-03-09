@@ -3,6 +3,7 @@ using System;
 using static System.Console;
 using Francesco;
 using Kacper;
+using Ignat;
 
 
 public class Program
@@ -11,7 +12,7 @@ public class Program
     public static void Main()
     {
         JsonStorage jsonStorage = new JsonStorage();
-        Grid grid;
+        IGrid grid;
         bool quit = false;
         Clear();
         WriteLine("Welcome to a simple implementation of Conway's Game of Life");
@@ -62,8 +63,8 @@ public class Program
             else break;
         }
 
-        Console.WriteLine("TThank you for using our Game of Life simulation!"); // I don't know why it eats the first letter
-        Console.ReadLine();
+        jsonStorage.Save(grid);
+        Console.WriteLine("TThank you for using our Game of Life simulation!"); // Double T intentional because it eats the first one for some reason
     }
 
     static Grid NewRandomGrid()
@@ -76,19 +77,19 @@ public class Program
 
         Grid randomGrid =  new Grid(rows, columns);
 
-        int cellsToPlace = ((int)Math.Round(Math.Sqrt(rows * columns)));
+        int minimumCells = ((int)Math.Round(Math.Sqrt(rows * columns)));
         Random random = new Random();
 
-        while(cellsToPlace > 0)
+        while(minimumCells > 0)
         {
             for(int r = 0; r < rows; r++)
             {
                 for(int c = 0; c < columns; c++)
                 {
-                    if(random.Next(1, 10) == 1 && cellsToPlace > 0)
+                    if(random.Next(1, 10) == 1)
                     {
-                        randomGrid.GetCell(r, c).State = true;
-                        cellsToPlace--;
+                        randomGrid.UpdateCellState(r, c, true);
+                        minimumCells--;
                     }
                 }
             }

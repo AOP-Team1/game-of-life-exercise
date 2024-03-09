@@ -1,8 +1,9 @@
 namespace Kacper;
 using GameOfLife;
+using Ignat;
 
 public interface IStorage
 {
-    public Grid Load();
-    public void Save();
+    public IGrid Load();
+    public void Save(IGrid grid);
 }

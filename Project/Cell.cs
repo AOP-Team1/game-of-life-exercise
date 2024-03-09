@@ -3,6 +3,7 @@ namespace Sebi
     public class Cell : ICell
     {
         public bool State { get; set; }
+        public bool FutureState { get; set; }
         public int Neighbours { get; set; }
 
         public Cell()
