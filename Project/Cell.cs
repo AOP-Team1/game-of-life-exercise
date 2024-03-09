@@ -5,6 +5,12 @@ namespace Sebi
         public bool State { get; set; }
         public int Neighbours { get; set; }
 
+        public Cell()
+        { 
+            State = false;
+            Neighbours = 0;
+        }
+
         public bool NextState(int Neighbours)
         {
             if (this.Neighbours == 3)
