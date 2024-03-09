@@ -2,25 +2,41 @@ namespace Francesco;
 using Kacper;
 using GameOfLife;
 using System.Text.Json;
+using Ignat;
+using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 
 public class JsonStorage : IStorage
 {
-    public void Save()
+    private string filePath = @"..\..\..\grid_data.json";
+
+    public void Save(IGrid grid)
     {
-        try
+        //string jsonString = JsonSerializer.Serialize(grid, new JsonSerializerOptions() { WriteIndented = true });
+        string jsonString = JsonConvert.SerializeObject(grid, Formatting.Indented);
+        using (StreamWriter outputFile = new StreamWriter(filePath))
         {
-
-        }
-        catch
-        {
-
+            outputFile.WriteLine(jsonString);
         }
 
     }
 
-    public Grid Load()
+    public IGrid Load()
     {
+        IGrid? grid = null;
+        GridStorage? storage;
 
-        return null;
+        using(StreamReader reader = new StreamReader(filePath))
+        {
+            string json = reader.ReadToEnd();
+            storage = JsonConvert.DeserializeObject<GridStorage>(json);
+            if(storage != null) grid = new Grid(storage);
+        }
+
+        if (grid == null)
+        {
+            throw new Exception("Failed to load the file from Json!");
+        }
+        else return grid;
     }
 }
