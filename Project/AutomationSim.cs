@@ -1,10 +1,10 @@
 using System;
 using Sebi;
 using Ignat;
-using Kacper;
 using GameOfLife;
+namespace Kacper;
 
-public class AutomationSim(IGrid grid, int gridWidth, int gridHeight)
+public class AutomationSim(IGrid grid)
 {
     private IGrid grid = grid;
 
@@ -14,36 +14,28 @@ public class AutomationSim(IGrid grid, int gridWidth, int gridHeight)
         {
             for(int j=0; j<grid.Columns; j++)
             {
-                SetCellToNextGeneration(i, j, grid, gridHeight, gridWidth);
+                SetCellToNextGeneration(i, j, grid);
             }
         }
     }
 
-    public void SetCellToNextGeneration(int row, int column, IGrid grid, int gridHeight, int gridWidth)
+    public void DisplayGrid()
     {
-        int neighbours = 0;
-        bool running = true;
-        int tempRow = row > 0 ? row : row - 1;
-
-        while (running)
+        for (int i = 0; i < grid.Rows; i++)
         {
-            if (column > 0)
+            for (int j = 0; j < grid.Columns; j++)
             {
-                if (grid.GetCell(tempRow, column-1).State) neighbours++;
+                Console.Write(grid.GetCell(i, j).State ? "O" : ".");
             }
-            if (grid.GetCell(tempRow, column).State) neighbours++;
-            if (column < gridWidth)
-            {
-                if (grid.GetCell(tempRow, column + 1).State) neighbours++;
-            }
-
-            if (tempRow < gridHeight && tempRow < row + 1) tempRow++;
-            else running = false;
+            Console.WriteLine();
         }
+    }
 
-        grid.GetCell(row, column).Neighbours = neighbours;
+    public void SetCellToNextGeneration(int row, int column, IGrid grid)
+    {
+        grid.CalculateLiveNeighbors();
+        int neighbours = grid.GetCell(row, column).Neighbours;
 
-        // Apply rules of the game
         if (neighbours < 2 || neighbours > 3) grid.GetCell(row, column).State = false;
         else if (neighbours == 3) grid.GetCell(row, column).State = true;
         // else leave the status of the cell the same

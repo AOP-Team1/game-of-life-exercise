@@ -36,7 +36,12 @@ public class Grid : IGrid
             return cells[row][column];
         }
         else
-            return null;
+        {
+            string message = "";
+            if (row >= 0 || row < Rows) message += "The specified row was outside of the defined grid!";
+            if (column >= 0 || column < Columns) message += " The specified column was outside of the defined grid";
+            throw new Exception(message);
+        }
 
     }
 
@@ -74,6 +79,19 @@ public class Grid : IGrid
                 cells[i][j].Neighbours = CountLiveNeighbors(i, j);
             }
         }
+    }
+
+    public bool IsGridAlive()
+    {
+        for (int i = 0; i < Rows; i++)
+        {
+            for (int j = 0; j < Columns; j++)
+            {
+                if (cells[i][j].State) return true;
+            }
+        }
+
+        return false;
     }
 
     public bool[,] GetCellStatus()
