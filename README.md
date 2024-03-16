@@ -2,6 +2,14 @@
 
 Group Project: Conway's Game of Life Simulator
 
+How the Project follows SOLID Principles:
+- Single Responsibility Principle: Each class in the project has only one responsibility: The Cell Class stores the data and methods that represent a single cell and will only be changed if the properties of a cell would change. The Grid Class stores an array of cells that make up a grid, it will only change if the rules of creating and storing or passing a grid were to change. The Automation Class has the responsibility of applying the rules of the game of life to each generation of the grid. The JsonStorage class has the responsibility of file peristency, so it only saves and loads grids for the program. Lastly the Program class is responsible for the UI.
+- Open/Closed Principle: The IStorage Interface provides a base for all future storage classes to inherit from. If in the future there is a need to use different file storage formats, the JsonStorage class does not need to be modified (which makes it closed for modification) but a new class for the specific storage can be created (open for extension).
+- Liskov Substitution Principle: This principle is not implemented in this project as there are no subclasses to override base class methods.
+- Interface Segregation Principle: All of the classes that implement the interfaces in the project (IStorage, IGrid, ICell) use all of the methods they need to implement from their respective interfaces so there is not an instance where a class is forced to implement methods irrelevant for it to function
+- Dependency Inversion Principle: The Grid class relies on object instances that implement the ICell interface instead of relying on Cell objects which decouples the code and makes the grid class more flexible. Storing data is handled in the same fashion, Program depends on the IStorage Interface instead of JsonStorage and JsonStorage returns IGrid objects.
+  
+
 Preamble: In 1970, mathematician John Horton Conway introduced the Game of Life, a deceptively simple cellular automaton governed by just a few rules of life, death, and birth for cells on a grid. Initially a playful mathematical exploration, the Game of Life rapidly captured imaginations with its mesmerizing patterns and unexpected depth.
 
 At its core, Conway's Game of Life is a deceptively simple experiment in emergence and computability. From a handful of rules governing the life and death of cells on a grid, unpredictable complexity blossoms. Patterns evolve, exhibiting behaviors reminiscent of living organisms: self-replication, organized movement, and even rudimentary computation.
